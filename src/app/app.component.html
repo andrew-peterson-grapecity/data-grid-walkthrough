@@ -1,0 +1,93 @@
+<h1>Data Grid Walkthrough</h1>
+
+<!-- Grid that is automatically creating columns based on the data soure -->
+<!-- <wj-flex-grid #salesGrid [itemsSource]="salesData"></wj-flex-grid> -->
+
+<!-- Manually creating columns grid -->
+<wj-flex-grid
+  #salesGrid
+  [itemsSource]="salesData"
+  (initialized)="salesGridInit(salesGrid)"
+  [selectionMode]="'Row'"
+>
+  <wj-flex-grid-filter #filter></wj-flex-grid-filter>
+
+  <wj-flex-grid-column
+    header="ID"
+    binding="id"
+    [format]="'g'"
+    [isReadOnly]="true"
+  ></wj-flex-grid-column>
+  <wj-flex-grid-column header="Customer" binding="customer">
+    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+      <div
+        [ngStyle]="{ 'background-color': cell.item.customerColor }"
+        class="customer"
+      >
+        {{ cell.item.customerInitial }}
+      </div>
+      {{ cell.item.customer }}
+    </ng-template>
+  </wj-flex-grid-column>
+  <wj-flex-grid-column header="Location" binding="location">
+    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1280px-Flag_of_the_United_States.svg.png"
+        class="flag flag-icon"
+      />
+      {{ cell.item.location }}
+    </ng-template>
+  </wj-flex-grid-column>
+  <wj-flex-grid-column
+    header="Phone Number"
+    binding="phoneNumber"
+  ></wj-flex-grid-column>
+  <wj-flex-grid-column header="Sales Agent" binding="salesAgent">
+    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+      <img
+        src="https://www.vocalcom.com/wp-content/uploads/2020/09/5-tips-for-driving-sales-agent-success.jpg"
+        alt=""
+        class="avatar"
+      />
+      {{ cell.item.salesAgent }}
+    </ng-template>
+  </wj-flex-grid-column>
+  <wj-flex-grid-column
+    header="Quote Amount"
+    binding="sale"
+    [format]="'c'"
+  ></wj-flex-grid-column>
+  <wj-flex-grid-column header="Lead Confidence" binding="lead">
+    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+      <wj-linear-gauge
+        [thickness]="0.3"
+        [min]="0"
+        [max]="100"
+        [value]="cell.item.lead"
+        [showRanges]="false"
+      ></wj-linear-gauge>
+    </ng-template>
+  </wj-flex-grid-column>
+  <wj-flex-grid-column header="Quote Date" binding="date"></wj-flex-grid-column>
+  <wj-flex-grid-column header="Quote Status" binding="orderStatus">
+    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+      <div *ngIf="cell.item.orderStatus === 'Complete'">
+        <span class="badge bg-complete">
+          {{ cell.item.orderStatus }}
+        </span>
+      </div>
+
+      <div *ngIf="cell.item.orderStatus === 'Pending'">
+        <span class="badge bg-pending">
+          {{ cell.item.orderStatus }}
+        </span>
+      </div>
+
+      <div *ngIf="cell.item.orderStatus === 'Closed'">
+        <span class="badge bg-closed">
+          {{ cell.item.orderStatus }}
+        </span>
+      </div>
+    </ng-template>
+  </wj-flex-grid-column>
+</wj-flex-grid>
